@@ -26,8 +26,17 @@ public class Algebra {
 	// Returns x1 + x2
 	public static int plus(int x1, int x2) {
 		// Replace the following statement with your code
-		for (int i = 0; i < x2; i++){
-			x1++;
+		if (x2 == 0) {
+			return x1;
+		}
+		if (x2 < 0) {
+			for (int i = 0; i < Math.abs(x2) ;i++){
+				x1--;
+			}
+		} else {
+			for (int i = 0; i < x2; i++) {
+				x1++;
+			}
 		}
 		return x1;
 	}
@@ -35,8 +44,16 @@ public class Algebra {
 	// Returns x1 - x2
 	public static int minus(int x1, int x2) {
 		// Replace the following statement with your code
-		for (int i = 0; i < x2; i++){
-			x1--;
+		if (x2 == 0) {
+			return x1;
+		} else if (x2 < 0) {
+			for (int i = 0; i < Math.abs(x2); i++) {
+				x1++;
+			}
+		} else {
+			for (int i = 0; i < x2; i++){
+				x1--;
+			}
 		}
 		return x1;
 	}
@@ -45,15 +62,28 @@ public class Algebra {
 	public static int times(int x1, int x2) {
 		// Replace the following statement with your code
 		int result = 0;
-		for (int i = 0; i < x2; i++){
-			result = plus(result, x1);
+		boolean isNegative = (x1 < 0) != (x2 < 0);
+
+		x1 = Math.abs(x1);
+		x2 = Math.abs(x2);
+
+		if (x1 == 0 || x2 == 0) {
+			return 0;
+		} else {
+			for (int i = 0; i < x2; i++) {
+				result = plus(result, x1);
+			}
+			return isNegative ? minus(0,result) : result;
 		}
-		return result;
 	}
 
 	// Returns x^n (for n >= 0)
 	public static int pow(int x, int n) {
 		// Replace the following statement with your code
+		if (n == 0) {
+			return 1;
+		}
+		
 		int result = x;
 		for (int i = 1; i < n; i++){
 			result = times(result, x);
@@ -64,21 +94,28 @@ public class Algebra {
 	// Returns the integer part of x1 / x2 
 	public static int div(int x1, int x2) {
 		// Replace the following statement with your code
+
 		if (x2 == 0){
-			return -1;
-		}
-		if (x1 < x2){
 			return -1;
 		}
 		if (x1 == 0){
 			return 0;
 		}
-		int result = x1;
-		int i = 0;
-		for (i = 0; result >= x2; i++){
-			result = minus(result, x2);
+		if (x1 < x2 && x1 > 0){
+			return 0;
 		}
-		return i;
+
+		boolean isNegative = (x1 < 0) != (x2 < 0);
+
+		x1 = Math.abs(x1);
+		x2 = Math.abs(x2);
+
+		int result = 0;
+		while (x1 >= x2) {
+			x1 = minus(x1, x2);
+			result++;
+		}
+		return (isNegative ? minus(0,result) : result);
 	}
 
 	// Returns x1 % x2
@@ -97,17 +134,17 @@ public class Algebra {
 		if (x == 0){
 			return 0;
 		}
-		int guess = x;
-
-		while (true) {
-			int guessSquared = times(guess, guess);
-			int nextGuess = div(plus(guess, div(x, guess)), 2); // newton
-			
-			if (minus(guess, nextGuess) <= 1 && minus(nextGuess, guess) <= 1){
-				break;
-			}
-			guess = nextGuess;
+		if (x ==1) {
+			return 1;
 		}
+		int guess = div(x, 2);
+		int nextGuess = div(plus(guess, div(x, guess)), 2);
+		double epsilon = 0.1;
+
+		while (minus(times(guess, guess), x) > epsilon) {
+			nextGuess = div(plus(guess, div(x, guess)), 2); // newton
+			guess = nextGuess;
+		}		
 		return guess;
 	}	
 }

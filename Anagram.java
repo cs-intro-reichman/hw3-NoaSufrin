@@ -31,6 +31,26 @@ public class Anagram {
 		// Replace the following statement with your code
 		str1 = preProcess(str1);
 		str2 = preProcess(str2);
+		String ans1 = "";
+		String ans2 = "";
+		
+		for (int i = 0; i < str1.length(); i++) {
+			char c = str1.charAt(i);
+
+			if (c != ' ') {
+				ans1 = ans1 + str1.charAt(i);
+			}
+		}
+		str1 = ans1;
+
+		for (int i = 0; i < str2.length(); i++) {
+			char c = str2.charAt(i);
+
+			if (c != ' ') {
+				ans2 = ans2 + str2.charAt(i);
+			}
+		}
+		str2 = ans2;
 
 		if (str1.length() != str2.length()) {
 			return false;
@@ -64,7 +84,7 @@ public class Anagram {
 		for (int i = 0; i < str.length(); i++) {
 			char c = str.charAt(i);
 
-			if (c != '?' && c != '!' && c != ' ') {
+			if (c != '?' && c != '!') {
 				ans = ans + str.charAt(i);
 			}
 		}
